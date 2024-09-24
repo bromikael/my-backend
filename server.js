@@ -20,7 +20,7 @@ app.use(cors({
 app.use(express.json());
 
  mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
+  .then(() => console.log('DB connected'))
   .catch(err => console.error(err));
 
 // Use authentication routes
