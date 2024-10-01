@@ -36,7 +36,7 @@ const loginUser = async (email, password) => {
 
 const generateToken = (userId) => {
   return jwt.sign(
-    { userId }, // Payload
+    { userId: userId }, // Payload
     process.env.JWT_SECRET,
     { expiresIn: '1h' } 
   );

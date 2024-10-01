@@ -4,7 +4,7 @@ const router = express.Router();
 const authMiddleware = require('../middleware/auth');
 
 router.get('/load', authMiddleware, async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user.userId;
   try {
     const cvData = await cvdata.findOne({ userId });
     if (!cvData) {
@@ -18,7 +18,7 @@ router.get('/load', authMiddleware, async (req, res) => {
 });
 
 router.put('/save', authMiddleware, async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user.userId;
   const { aboutMe, skills, projects } = req.body;
 
   console.log('Received data:', { aboutMe, skills, projects });
