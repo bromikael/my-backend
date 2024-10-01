@@ -1,27 +1,18 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const CvDataSchema = new mongoose.Schema({
-    userId: {
-      type: String, 
-      required: true
+const CvDataSchema = new Schema({
+  userId: { type: String, required: true },
+  aboutMe: { type: String },
+  skills: { type: [String] },
+  projects: [
+    {
+      name: String,
+      text: String,
+      link: String,
     },
-    aboutMe: {
-      type: String,
-      required: true
-    },
-    skills: {
-      type: [String], 
-      required: true
-    },
-    projects: [
-      {
-        name: String,
-        description: String,
-        link: String
-      }
-    ],
-    // Add more fields as needed (education, certifications, etc.)
-  });
-  
-  const CvData = mongoose.model('CvData', CvDataSchema);
-  module.exports = CvData;
+  ],
+});
+
+const CvData = mongoose.model('CvData', CvDataSchema);
+module.exports = CvData;

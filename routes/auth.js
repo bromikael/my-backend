@@ -1,9 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { registerUser, generateToken } = require('../services/userService');
 const router = express.Router();
 const { pool } = require('../dbConfig'); 
-const saltRounds = 10;
 
 
 router.post('/register', async (req, res) => {
@@ -12,25 +12,9 @@ router.post('/register', async (req, res) => {
   console.log('register attempt');
 
   try {
-    const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (existingUser.rows.length > 0) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const newUser = await pool.query(
-      'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *',
-      [email, hashedPassword]
-    );
-
-    const token = jwt.sign(
-      { userId: newUser.rows[0].id },  // Include user ID or other relevant info
-      process.env.JWT_SECRET,  // Secret key from environment variables
-      { expiresIn: '1h' }  // Set token expiry time
-    );
-
-    res.status(201).json({ token, user: newUser.rows[0] });
+    const newUser = await registerUser(email, password);
+    const token = generateToken(newUser.id);
+    res.status(201).json({ token, user: newUser });
 
   } catch (err) {
     console.error(err.message);
